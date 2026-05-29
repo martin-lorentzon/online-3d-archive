@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>the block - free 3D archive</title>
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/neon.css" />
+  </head>
+
+  <body>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet" />
+
+    <h1 class="neon-title">the <span class="neon-box">block</span></h1>
+
+    <div class="description">
+      <p>Free, low-fidelity 3D recreations of random stuff on the web and out in the real world.</p>
+
+      <div class="collapse">
+        <button class="collapse-toggle" onclick="this.closest('.collapse').classList.toggle('open')">
+          Asset License Agreement
+          <span class="chevron">▼</span>
+        </button>
+        <div class="collapse-body">
+          <div class="collapse-body-inner">
+            <h1>Asset License Agreement</h1>
+            <h2>Permitted Use</h2>
+            <p>
+              You are free to use and modify these assets for personal, educational, and commercial projects.<br />
+              No attribution is required, though it is always appreciated! If you plan on giving attribution, please credit the individual <strong>author(s)</strong> rather than the website.
+            </p>
+            <h2>Restrictions</h2>
+            <p>
+              These assets may not be resold, sublicensed as standalone assets or used in AI model training.<br />
+              Distribution is permitted only when integrated into a larger project that is not an asset pack.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="controls">
+      <button class="glow-button" id="download-btn">Download Selected Assets</button>
+    </div>
+
+    <div class="grid" id="model-grid"></div>
+
+    <script>
+      const gridContainer = document.getElementById("model-grid");
+
+      // 1. FETCH JSON AND GENERATE THE GRID DYNAMICALLY
+      async function loadLibrary() {
+        try {
+          const response = await fetch("models.json");
+          const models = await response.json();
+
+          models.forEach((model) => {
+            // Create the card element
+            const card = document.createElement("div");
+            card.className = "card";
+
+            // Inject the template with model specific data
+            card.innerHTML = `
+            <model-viewer src="${model.path}" camera-controls auto-rotate alt="${model.name}"></model-viewer>
+            <div class="card-meta">
+              <label class="model-label">
+                <input type="checkbox" class="model-select"
+                  data-filepath="${model.path}"
+                  data-filename="${model.id}.glb">
+
+                <span class="model-name">${model.name}</span>
+                <span class="model-author">Author: ${model.author}</span>
+              </label>
+            </div>
+          `;
+
+            gridContainer.appendChild(card);
+          });
+        } catch (error) {
+          console.error("Error loading the model library:", error);
+        }
+      }
+
+      // 2. BULK DOWNLOAD LOGIC (Stays the same, works perfectly with dynamic elements)
+      document.getElementById("download-btn").addEventListener("click", async () => {
+        const checkboxes = document.querySelectorAll(".model-select:checked");
+
+        if (checkboxes.length === 0) {
+          alert("Please select at least one model to download.");
+          return;
+        }
+
+        const zip = new JSZip();
+        document.getElementById("download-btn").innerText = "Zipping...";
+
+        for (const checkbox of checkboxes) {
+          const filePath = checkbox.getAttribute("data-filepath");
+          const fileName = checkbox.getAttribute("data-filename");
+
+          try {
+            const response = await fetch(filePath);
+            if (!response.ok) throw new Error(`Failed to fetch ${fileName}`);
+            const blob = await response.blob();
+            zip.file(fileName, blob);
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        zip.generateAsync({ type: "blob" }).then((content) => {
+          saveAs(content, "the-block-3d-models.zip");
+          document.getElementById("download-btn").innerText = "Download Selected Assets";
+        });
+      });
+
+      // Run the generator on page load
+      loadLibrary();
+    </script>
+  </body>
+</html>

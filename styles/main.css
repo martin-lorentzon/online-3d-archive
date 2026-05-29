@@ -1,0 +1,191 @@
+/* ==========================================================================
+   1. Global Styles & Layout
+   ========================================================================== */
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  margin: 40px;
+  background: #0f111a;
+  color: #e2e8f0;
+}
+
+.controls {
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+/* ==========================================================================
+   2. Components: Cards & Media
+   ========================================================================== */
+.card {
+  background: #1e2235;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
+  text-align: center;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+model-viewer {
+  display: block;
+  /* Ensures proper layout behavior as a custom element */
+  width: 100%;
+  height: 200px;
+  background-color: #151824;
+  border-radius: 8px;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.model-label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 6px;
+}
+
+.model-author {
+  margin-left: auto;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   3. Components: Collapse
+   ========================================================================== */
+.collapse {
+  margin-bottom: 24px;
+  background: #1e2235;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+}
+
+.collapse-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s linear;
+}
+
+.collapse-toggle:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.collapse-toggle .chevron {
+  color: #94a3b8;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.25s ease-in-out;
+}
+
+.collapse.open .chevron {
+  transform: rotate(180deg);
+}
+
+.collapse-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.15s linear;
+  padding: 0 20px;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.collapse.open .collapse-body {
+  grid-template-rows: 1fr;
+}
+
+.collapse-body-inner {
+  overflow: hidden;
+  padding-bottom: 0;
+  transition: padding-bottom 0.15s linear;
+}
+
+.collapse.open .collapse-body-inner {
+  padding-bottom: 18px;
+}
+
+/* ==========================================================================
+   4. Buttons & Links (Interactive)
+   ========================================================================== */
+button {
+  padding: 10px 20px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+/* Fixed class connection: Assuming your main buttons use this class */
+.glow-button:hover {
+  background: #4f46e5;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+
+a {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: #818cf8;
+  text-decoration: underline;
+}
+
+/* Contextual Link Overrides */
+.card-meta a,
+.model-author a {
+  color: #94a3b8;
+}
+
+.card-meta a:hover,
+.model-author a:hover {
+  color: #6366f1;
+  text-decoration: none;
+}
