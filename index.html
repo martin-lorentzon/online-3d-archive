@@ -55,10 +55,14 @@
     <script>
       const gridContainer = document.getElementById("model-grid");
 
+      // Create a unique timestamp for this session/page load
+      const cacheBuster = `?v=${new Date().getTime()}`;
+
       // 1. FETCH JSON AND GENERATE THE GRID DYNAMICALLY
       async function loadLibrary() {
         try {
-          const response = await fetch(`models.json?v=${new Date().getTime()}`);
+          // Cache-bust the JSON file
+          const response = await fetch(`models.json${cacheBuster}`);
           const models = await response.json();
 
           models.forEach((model) => {
@@ -66,20 +70,20 @@
             const card = document.createElement("div");
             card.className = "card";
 
-            // Inject the template with model specific data
+            // Append the cacheBuster to the model-viewer src attribute
             card.innerHTML = `
-            <model-viewer src="${model.path}" camera-controls auto-rotate alt="${model.name}"></model-viewer>
-            <div class="card-meta">
-              <label class="model-label">
-                <input type="checkbox" class="model-select"
-                  data-filepath="${model.path}"
-                  data-filename="${model.id}.glb">
+        <model-viewer src="${model.path}${cacheBuster}" camera-controls auto-rotate alt="${model.name}"></model-viewer>
+        <div class="card-meta">
+          <label class="model-label">
+            <input type="checkbox" class="model-select"
+              data-filepath="${model.path}"
+              data-filename="${model.id}.glb">
 
-                <span class="model-name">${model.name}</span>
-                <span class="model-author">Author: ${model.author}</span>
-              </label>
-            </div>
-          `;
+            <span class="model-name">${model.name}</span>
+            <span class="model-author">Author: ${model.author}</span>
+          </label>
+        </div>
+      `;
 
             gridContainer.appendChild(card);
           });
@@ -88,7 +92,7 @@
         }
       }
 
-      // 2. BULK DOWNLOAD LOGIC (Stays the same, works perfectly with dynamic elements)
+      // 2. BULK DOWNLOAD LOGIC
       document.getElementById("download-btn").addEventListener("click", async () => {
         const checkboxes = document.querySelectorAll(".model-select:checked");
 
@@ -105,7 +109,8 @@
           const fileName = checkbox.getAttribute("data-filename");
 
           try {
-            const response = await fetch(filePath);
+            // Cache-bust the fetch request for the zip download as well
+            const response = await fetch(`${filePath}${cacheBuster}`);
             if (!response.ok) throw new Error(`Failed to fetch ${fileName}`);
             const blob = await response.blob();
             zip.file(fileName, blob);
