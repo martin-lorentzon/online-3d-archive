@@ -4,5 +4,11 @@
         "name": "Couch",
         "author": "Martin L",
         "path": "models/couch.glb"
+    },
+    {
+        "id": "mud cake",
+        "name": "Mud Cake",
+        "author": "Martin L",
+        "path": "models/mud cake.glb"
     }
 ]
