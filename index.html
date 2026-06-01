@@ -58,7 +58,7 @@
       // 1. FETCH JSON AND GENERATE THE GRID DYNAMICALLY
       async function loadLibrary() {
         try {
-          const response = await fetch("models.json");
+          const response = await fetch(`models.json?v=${new Date().getTime()}`);
           const models = await response.json();
 
           models.forEach((model) => {
