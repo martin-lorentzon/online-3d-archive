@@ -3,12 +3,14 @@
         "id": "couch",
         "name": "Couch",
         "author": "Martin L",
-        "path": "models/couch.glb"
+        "path": "models/couch.glb",
+        "poster": "models/posters/couch.webp"
     },
     {
         "id": "mud cake",
         "name": "Mud Cake",
         "author": "Martin L",
-        "path": "models/mud cake.glb"
+        "path": "models/mud-cake.glb",
+        "poster": "models/posters/mud-cake.webp"
     }
 ]

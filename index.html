@@ -70,22 +70,34 @@
             const card = document.createElement("div");
             card.className = "card";
 
-            // Append the cacheBuster to the model-viewer src attribute
             card.innerHTML = `
-        <model-viewer src="${model.path}${cacheBuster}" camera-controls auto-rotate alt="${model.name}"></model-viewer>
-        <div class="card-meta">
-          <label class="model-label">
-            <input type="checkbox" class="model-select"
-              data-filepath="${model.path}"
-              data-filename="${model.id}.glb">
+              <model-viewer
+                id="${model.id}"
+                loading="lazy"
+                reveal="manual"
+                src="${model.path}${cacheBuster}"
+                camera-controls
+                alt="${model.name}"
+                poster="${model.poster}">
+              </model-viewer>
+              
+              <div class="card-meta">
+                <label class="model-label">
+                  <input type="checkbox" class="model-select"
+                    data-filepath="${model.path}"
+                    data-filename="${model.id}.glb">
 
-            <span class="model-name">${model.name}</span>
-            <span class="model-author">Author: ${model.author}</span>
-          </label>
-        </div>
-      `;
+                  <span class="model-name">${model.name}</span>
+                  <span class="model-author">Author: ${model.author}</span>
+                </label>
+              </div>
+              `;
 
             gridContainer.appendChild(card);
+            const viewer = card.querySelector("model-viewer");
+            viewer.addEventListener("click", () => {
+              viewer.dismissPoster();
+            });
           });
         } catch (error) {
           console.error("Error loading the model library:", error);
