@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/model-viewer.css" />
     <link rel="stylesheet" href="styles/neon.css" />
   </head>
 
@@ -79,6 +80,7 @@
                 camera-controls
                 alt="${model.name}"
                 poster="${model.poster}">
+                <div class="poster-hint">Click to interact</div>
               </model-viewer>
               
               <div class="card-meta">
@@ -86,7 +88,6 @@
                   <input type="checkbox" class="model-select"
                     data-filepath="${model.path}"
                     data-filename="${model.id}.glb">
-
                   <span class="model-name">${model.name}</span>
                   <span class="model-author">Author: ${model.author}</span>
                 </label>
@@ -97,6 +98,8 @@
             const viewer = card.querySelector("model-viewer");
             viewer.addEventListener("click", () => {
               viewer.dismissPoster();
+              const hint = viewer.querySelector(".poster-hint");
+              if (hint) hint.style.display = "none";
             });
           });
         } catch (error) {
